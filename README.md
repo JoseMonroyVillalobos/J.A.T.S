@@ -1,10 +1,10 @@
-## Robot Tracking and Control System
+# Robot Tracking and Control System
 
 - This repository contains the code and documentation for a robot tracking and control system. The project uses Ultra-Wideband (UWB) technology for precise localization and communication protocols like ESPNOW and Bluetooth to control the robot’s movement.
 
-##Project Overview
+## Project Overview
 
-# Objective
+## Objective
 
 - The robot is designed to continuously track a tag the user carries and adjust its position to ensure it always faces the tag and follows user. Additionally, an alternative control mode allows for direct manual operation of the robot using a Bluetooth-enabled application.
 
@@ -18,33 +18,33 @@
 
 - Bluetooth Control: An alternate version using the Dabble library enables manual control of the robot via Bluetooth.
 
-System Components
+## System Components
 
-Hardware
+### Hardware
 
-Anchors: Three UWB modules positioned on the robot.
+- Anchors: Three UWB modules positioned on the robot.
 
-Tag: A UWB module carried by the user.
+- Tag: A UWB module carried by the user.
 
-Microcontrollers: ESP32 boards for localization, processing, and drivetrain control.
+- Microcontrollers: ESP32 boards for localization, processing, and drivetrain control.
 
-Drivetrain: Motors and motor drivers controlled by the drivetrain ESP32 microcontroller.
+- Drivetrain: Motors and motor drivers controlled by the drivetrain ESP32 microcontroller.
 
-Software
+### Software
 
-Localization Algorithm: Implements trilateration to calculate the tag's position relative to the robot.
+- Localization Algorithm: Implements trilateration to calculate the tag's position relative to the robot.
 
-Movement Algorithm: Determines the robot's movement to maintain alignment with the tag.
+- Movement Algorithm: Determines the robot's movement to maintain alignment with the tag.
 
-ESPNOW Communication: Facilitates wireless communication between the main and drivetrain microcontrollers.
+- ESPNOW Communication: Facilitates wireless communication between the main and drivetrain microcontrollers.
 
-Bluetooth Control: Uses the Dabble library for direct manual control of the drivetrain ESP32.
+- Bluetooth Control: Uses the Dabble library for direct manual control of the drivetrain ESP32.
 
-Project Versions
+## Project Versions
 
-AutonomousESPNOWVersion
+### AutonomousESPNOWVersion
 
-This version focuses on autonomous operation:
+- This version focuses on autonomous operation:
 
 Continuously calculates the tag's position using distances from the three anchors.
 
@@ -52,19 +52,19 @@ Sends movement instructions via ESPNOW to the drivetrain ESP32.
 
 Suitable for autonomous tracking scenarios.
 
-Bluetooth Control
+### Bluetooth Control
 
-This version allows manual operation:
+- This version allows manual operation:
 
-Uses the Dabble library for Bluetooth communication.
+- Uses the Dabble library for Bluetooth communication.
 
-Sends movement commands directly to the drivetrain ESP32 from a mobile device.
+- Sends movement commands directly to the drivetrain ESP32 from a mobile device.
 
-Ideal for scenarios requiring direct manual control.
+- Ideal for scenarios requiring direct manual control.
 
-Why Separate Versions?
+##Why Separate Versions?
 
-Due to program space limitations on the drivetrain ESP32, the ESPNOW-based tracking system and the Bluetooth control system are maintained as separate versions.
+- Due to program space limitations on the drivetrain ESP32, the ESPNOW-based tracking system and the Bluetooth control system are maintained as separate versions.
 
 Getting Started
 
