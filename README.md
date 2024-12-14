@@ -26,7 +26,7 @@
 
 - Tag: A UWB module carried by the user.
 
-- Microcontrollers: ESP32 boards for localization, processing, and drivetrain control.
+- Microcontrollers: ESP32 boards for ldrivetrain control and communication via ESPNOW or Bluetooth.
 
 - Drivetrain: Motors and motor drivers controlled by the drivetrain ESP32 microcontroller.
 
