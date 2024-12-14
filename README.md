@@ -1,7 +1,8 @@
 # Robot Tracking and Control System
 
 - This repository contains the code and documentation for a robot tracking and control system. The project uses Ultra-Wideband (UWB) technology for precise localization and communication protocols like ESPNOW and Bluetooth to control the robot’s movement.
-- 
+![JATSRobot](https://github.com/user-attachments/assets/757c6047-97f3-4dc4-a8a2-c3c77859cde7)
+
 
 ## Project Overview
 
