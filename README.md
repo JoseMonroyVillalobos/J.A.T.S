@@ -43,14 +43,13 @@
 ## Project Versions
 
 ### AutonomousESPNOWVersion
+This version focuses on autonomous operation:
 
-- This version focuses on autonomous operation:
+- Continuously calculates the tag's position using distances from the three anchors.
 
-Continuously calculates the tag's position using distances from the three anchors.
+- Sends movement instructions via ESPNOW to the drivetrain ESP32.
 
-Sends movement instructions via ESPNOW to the drivetrain ESP32.
-
-Suitable for autonomous tracking scenarios.
+- Suitable for autonomous tracking scenarios.
 
 ### Bluetooth Control
 
@@ -62,46 +61,47 @@ Suitable for autonomous tracking scenarios.
 
 - Ideal for scenarios requiring direct manual control.
 
-##Why Separate Versions?
+## Why Separate Versions?
 
 - Due to program space limitations on the drivetrain ESP32, the ESPNOW-based tracking system and the Bluetooth control system are maintained as separate versions.
 
-Getting Started
+## Getting Started
 
-Prerequisites
+### Hardware
 
-ESP32 microcontrollers.
+- ESP32 microcontrollers.
 
-ESP32 UWB modules from makerfabs
+- ESP32 UWB modules from makerfabs
 
-Motor driver boards TB6612FNG and motors for the drivetrain.
+- Motor driver boards TB6612FNG and motors for the drivetrain.
 
-Dabble app for Bluetooth control (optional).
+### Software
 
-Installation
+- Dabble app for Bluetooth control (optional).
 
-Install the necessary libraries:
+## Installation
 
-DW3000
+Install the necessary modified libraries:
 
-DabbleESP32 (for Bluetooth version).
+- DW3000
+
+- DabbleESP32 (for Bluetooth version).
 
 Upload the respective code to the ESP32 microcontrollers.
 
-
-Usage
+## Usage
 
 UWB Tracking
 
-Power on the robot and the tag.
+- Power on the robot and the tag.
 
-The robot will automatically calculate the tag's position and adjust its orientation.
+- The robot will automatically calculate the tag's position and adjust its orientation.
 
 Bluetooth Control
 
-Pair your mobile device with the drivetrain ESP32 via Bluetooth.
+- Pair your mobile device with the drivetrain ESP32 via Bluetooth.
 
-Open the Dabble app and use the control interface to operate the robot manually.
+- Open the Dabble app and use the control interface to operate the robot manually.
 
 Contributing
 
