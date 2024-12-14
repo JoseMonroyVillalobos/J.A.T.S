@@ -1,1 +1,173 @@
+#include <math.h>
+#include <esp_now.h>
+#include <WiFi.h>
 
+#define MAX_PWM_VALUE 191  // Max PWM value to limit voltage to 6V when battery is at 8.6V * (177/255)= 6V. Motors rated for 6V
+
+// Define sound speed in cm/us
+#define SOUND_SPEED 0.034
+#define CM_TO_INCH 0.393701
+
+// Motor Pins
+int rightMotorPin1 = 22;
+int rightMotorPin2 = 4; 
+int rightMotorPWM = 26; 
+
+int leftMotorPin1 = 19;
+int leftMotorPin2 = 21;
+int leftMotorPWM = 25;  
+
+int StandByPin = 5; // High when motors are in motion, low when motors are not in use
+
+// PWM configuration
+const int freq = 1600;  // PWM frequency set to 20 kHz
+const int resolution = 8; // PWM resolution (8 bits)
+
+const int SPEED_VALUE = MAX_PWM_VALUE; // Maximum allowed PWM value
+
+
+long duration;
+float FdistanceCm;
+float BdistanceCm;
+
+
+unsigned long previousMillis = 0; // Stores the last time the sensor was checked
+const long interval = 500;        // Interval between distance checks in milliseconds
+
+//Front Ultra Sonic Sensor
+const int FtrigPin = 39; // Pin for Trigger
+const int FechoPin = 36; // Pin for Echo
+
+//Back Ultra Sonic Sensor
+const int BtrigPin = 35; // Pin for Trigger
+const int BechoPin = 34; // Pin for Echo
+
+void rotateMotor(int rightMotorSpeed, int leftMotorSpeed) {
+
+  // Right motor direction
+  if (rightMotorSpeed > 0) {
+    digitalWrite(rightMotorPin1, HIGH);
+    digitalWrite(rightMotorPin2, LOW);
+    digitalWrite(StandByPin, HIGH);
+  } else if (rightMotorSpeed < 0) {
+    digitalWrite(rightMotorPin1, LOW);
+    digitalWrite(rightMotorPin2, HIGH);
+    digitalWrite(StandByPin, HIGH);
+  } else {
+    digitalWrite(rightMotorPin1, LOW);
+    digitalWrite(rightMotorPin2, LOW);
+    digitalWrite(StandByPin, LOW);
+  }
+
+  // Left motor direction
+  if (leftMotorSpeed > 0) {
+    digitalWrite(leftMotorPin1, HIGH);
+    digitalWrite(leftMotorPin2, LOW);
+    digitalWrite(StandByPin, HIGH);
+  } else if (leftMotorSpeed < 0) {
+    digitalWrite(leftMotorPin1, LOW);
+    digitalWrite(leftMotorPin2, HIGH);
+    digitalWrite(StandByPin, HIGH);
+  } else {
+    digitalWrite(leftMotorPin1, LOW);
+    digitalWrite(leftMotorPin2, LOW);
+    digitalWrite(StandByPin, LOW);
+  }
+
+  // Right motor speed (PWM)
+  int rightSpeedValue = abs(rightMotorSpeed);
+  ledcWrite(rightMotorPWM, rightSpeedValue);
+
+  // Left motor speed (PWM)
+  int leftSpeedValue = abs(leftMotorSpeed);
+  ledcWrite(leftMotorPWM, leftSpeedValue);
+}
+
+
+void setUpPinModes() {
+  pinMode(rightMotorPin1, OUTPUT);
+  pinMode(rightMotorPin2, OUTPUT);
+
+  pinMode(leftMotorPin1, OUTPUT);
+  pinMode(leftMotorPin2, OUTPUT);
+
+  pinMode(StandByPin, OUTPUT);
+
+  pinMode(FtrigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(FechoPin, INPUT); // Sets the echoPin as an Input
+  pinMode(BtrigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(BechoPin, INPUT); // Sets the echoPin as an Input
+
+  rotateMotor(0, 0); // Stop motors at the start
+}
+
+// Structure example to receive data
+// Must match the sender structure
+typedef struct struct_message {
+    int a;
+
+} struct_message;
+
+// Create a struct_message called myData
+struct_message myData;
+
+// callback function that will be executed when data is received
+void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  memcpy(&myData, incomingData, sizeof(myData));
+  Serial.print("Bytes received: ");
+  Serial.print("Int: ");
+  Serial.println(myData.a);
+
+
+}
+ 
+
+void setup() {
+  Serial.begin(9600);
+  setUpPinModes();
+  
+  // Set device as a Wi-Fi Station
+  WiFi.mode(WIFI_STA);
+    // Init ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+  
+  esp_now_register_recv_cb(esp_now_recv_cb_t(OnDataRecv));
+  // Configure PWM pins 
+  if (!ledcAttach(rightMotorPWM, freq, resolution)) {
+    Serial.println("Error: Failed to configure right motor PWM!");
+  }
+
+  if (!ledcAttach(leftMotorPWM, freq, resolution)) {
+    Serial.println("Error: Failed to configure left motor PWM!");
+  }
+}
+
+
+void loop() {
+  int rightMotorSpeed = 0;
+  int leftMotorSpeed = 0;
+ 
+  if (myData.a ==  1) { //Forward
+    rightMotorSpeed = SPEED_VALUE;
+    leftMotorSpeed = SPEED_VALUE;
+  }
+  else if (myData.a ==  2) { //Backward
+    rightMotorSpeed = -SPEED_VALUE;
+    leftMotorSpeed = -SPEED_VALUE;
+  }
+  else if (myData.a ==  3) { //In place turn to left
+    rightMotorSpeed = SPEED_VALUE;
+    leftMotorSpeed = -SPEED_VALUE;
+  }
+  else if (myData.a ==  4) { //In place turn to right
+    rightMotorSpeed = -SPEED_VALUE;
+    leftMotorSpeed = SPEED_VALUE;
+  }
+ 
+
+  rotateMotor(rightMotorSpeed, leftMotorSpeed); // Update motor speed and direction
+
+}
