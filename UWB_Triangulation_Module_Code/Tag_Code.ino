@@ -1,6 +1,8 @@
-//Tag Code
+//Final Tag Code communicates with drivetrain ESP32 via ESPNow to make it follow the tag
 #include "dw3000.h"
 #include <math.h>
+#include <esp_now.h>
+#include <WiFi.h>
 
 #define PIN_RST 27
 #define PIN_IRQ 34
@@ -16,6 +18,26 @@
 #define RESP_MSG_TS_LEN 4
 #define POLL_TX_TO_RESP_RX_DLY_UUS 240
 #define RESP_RX_TIMEOUT_UUS 400
+
+// Drivetrain ESP32 MAC Address
+uint8_t broadcastAddress[] = {0xF8, 0xB3, 0xB7, 0x42, 0xC4, 0xC4};
+
+/*We send the drivetrain microcontroller an integer via ESPNOW to act as commands
+0 = No movement
+1= Forward
+2 = Backward
+3 = Counterclockwise rotation, turns to left
+4 = Clockwise rotation, turns to the right
+*/
+typedef struct struct_message {
+
+  int movement;
+
+} struct_message;
+
+struct_message myData;
+
+esp_now_peer_info_t peerInfo;
 
 /* Default communication configuration. We use default non-STS DW mode. */
 static dwt_config_t config = {
@@ -34,7 +56,6 @@ static dwt_config_t config = {
     DWT_PDOA_M0       /* PDOA mode off */
 };
 
-
 //  Anchor 1
 static uint8_t tx_poll_msg1[] = {0x41, 0x88, 0, 0xCA, 0xDE, 'W', '1', 'V', 'E', 0xE0, 0, 0};
 static uint8_t rx_resp_msg1[] = {0x41, 0x88, 0, 0xCA, 0xDE, 'V', 'E', 'W', '1', 0xE1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -50,6 +71,7 @@ static uint8_t rx_resp_msg3[] = {0x41, 0x88, 0, 0xCA, 0xDE, 'V', 'E', 'W', '3', 
 static uint8_t frame_seq_nb = 0;
 static uint8_t rx_buffer[20];
 static uint32_t status_reg = 0;
+
 static double tof;
 static double distance1;
 static double distance2;
@@ -66,6 +88,13 @@ static double Angle;
 
 extern dwt_txconfig_t txconfig_options;
 
+
+// callback when data is sent
+void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+  //Serial.print("\r\nLast Packet Send Status:\t");
+  //Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+}
+
 //  Setup for round robbin scheduling
 enum AnchorState {
     ANCHOR1,
@@ -76,69 +105,6 @@ enum AnchorState {
 AnchorState anchorstate = ANCHOR1; // Start with the first state
 
 
-
-
-void computeTagPositionAndVector(double d1, double d2, double d3, double &magnitude, double &angle) {
-    //Known anchor positions
-    double x1 = ANCHOR1_X, y1 = ANCHOR1_Y;
-    double x2 = ANCHOR2_X, y2 = ANCHOR2_Y;
-    double x3 = ANCHOR3_X, y3 = ANCHOR3_Y;
-
-    //Calculate coefficients for trilateration equations
-    double A = 2 * (x2 - x1);
-    double B = 2 * (y2 - y1);
-    double C = d1 * d1 - d2 * d2 - x1 * x1 - y1 * y1 + x2 * x2 + y2 * y2;
-    double D = 2 * (x3 - x1);
-    double E = 2 * (y3 - y1);
-    double F = d1 * d1 - d3 * d3 - x1 * x1 - y1 * y1 + x3 * x3 + y3 * y3;
-
-    //Solve for (xt, yt)
-    double xt = (C - B * ((C * D - A * F) / (B * D - A * E))) / A;
-    double yt = (C * D - A * F) / (B * D - A * E);
-
-    //Compute vector properties
-    magnitude = sqrt(xt * xt + yt * yt);       //Calculate magnitude
-    angle = atan2(yt, xt) * (180.0 / M_PI);   //Calculate angle in degrees
-}
-
-
-// Kalman Filter Class
-class KalmanFilter {
-private:
-    double Q; // Process noise covariance
-    double R; // Measurement noise covariance
-    double x; // Value
-    double P; // Estimation error covariance
-    double K; // Kalman gain
-
-public:
-    KalmanFilter(double process_noise, double measurement_noise, double initial_estimate) {
-        Q = process_noise;
-        R = measurement_noise;
-        x = initial_estimate;
-        P = 1.0; // Initial estimation error
-    }
-
-    double update(double measurement) {
-        // Prediction update
-        P += Q;
-
-        // Measurement update
-        K = P / (P + R);
-        x = x + K * (measurement - x);
-        P = (1 - K) * P;
-
-        return x;
-    }
-};
-
-// Kalman filter instances
-KalmanFilter kalmanFilter1(0.01, 0.1, 0.0); // Adjust noise parameters as needed
-KalmanFilter kalmanFilter2(0.01, 0.1, 0.0);
-KalmanFilter kalmanFilter3(0.01, 0.1, 0.0);
-
-
-
 void setup()
 {
   UART_init();
@@ -146,6 +112,30 @@ void setup()
   spiBegin(PIN_IRQ, PIN_RST);
   spiSelect(PIN_SS);
 
+ 
+  // Set device as a Wi-Fi Station
+  WiFi.mode(WIFI_STA);
+
+  // Init ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+
+  // Once ESPNow is successfully Init, we will register for Send CB to
+  // get the status of Trasnmitted packet
+  esp_now_register_send_cb(OnDataSent);
+  
+  // Register peer
+  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
+  peerInfo.channel = 0;  
+  peerInfo.encrypt = false;
+  
+  // Add peer        
+  if (esp_now_add_peer(&peerInfo) != ESP_OK){
+    Serial.println("Failed to add peer");
+    return;
+  }
   delay(2); // Time needed for DW3000 to start up (transition from INIT_RC to IDLE_RC, or could wait for SPIRDY event)
 
   while (!dwt_checkidlerc()) // Need to make sure DW IC is in IDLE_RC before proceeding
@@ -273,7 +263,7 @@ void loop()
 
     if(communicateWithAnchor(distance1, tx_poll_msg1, rx_resp_msg1))
     {
-      //distance1 = kalmanFilter1.update(distance1); // Smooth distance1
+
       anchorstate = ANCHOR2;//Advance to next Anchor
     }
     
@@ -284,7 +274,7 @@ void loop()
 
     if(communicateWithAnchor(distance2, tx_poll_msg2, rx_resp_msg2))
     {
-      //distance2 = kalmanFilter2.update(distance2); // Smooth distance2
+
       anchorstate = ANCHOR3;//Advance to next Anchor
     }
     
@@ -295,42 +285,65 @@ void loop()
 
     if(communicateWithAnchor(distance3, tx_poll_msg3, rx_resp_msg3))
     {
-      //distance3 = kalmanFilter3.update(distance3); // Smooth distance3
+
       anchorstate = ANCHOR1;//Advance to next Anchor
     }
 
   } 
   Serial.printf( "Distance 1: %3.3f  Distance 2: %3.3f  Distance 3: %3.3f", distance1, distance2, distance3);
+  myData.movement = 0;
+  double stopdistance = 30;
 
-  if(distance1<distance2 && distance1<distance3)
-  {
-    Serial.printf( "  Orientation: Front\n");
-
-  }
-  else if(distance1>distance2 && distance1>distance3)
-  {
-    Serial.printf( "  Orientation: Back\n");
-
-  }
-  else if(distance2<distance1 && distance2<distance3)
-  {
-    Serial.printf( "  Orientation: Right\n");
-
-  }
-  else if(distance3<distance1 && distance3<distance2)
-  {
-    Serial.printf( "  Orientation: Left\n");
-
-  }
-/*
-  // Compute position and vector
-  if (distance1 > 0 && distance2 > 0 && distance3 > 0) {
-      computeTagPositionAndVector(distance1, distance2, distance3, Magnitude, Angle);
-      Serial.printf("Magnitude: %3.2f, Angle: %3.2f\n", Magnitude, Angle);
-  } else {
-      Serial.println("Invalid distances, skipping position calculation.");
+  // If anchor1 distance is smallest this means tag is in front of robot. If anchor1 is greater than stop distance we do foward movement following
+  if ((distance1 < distance2 && distance1 < distance3) && distance1 > stopdistance) {
+      //If absolute difference between distances on anchor 2 and 3 exceed 4 this means robot must reorient
+      if(abs(distance2 - distance3)>4)
+      {
+        //If anchor3 distance is greater than anchor2 distance2 this means tag is on the right side, so we send right movement command
+        if(distance3>distance2)
+        {
+          myData.movement = 4;
+        }
+        //If anchor2 distance is greater than anchor3 distance this means tag is on the left side, so we send left movement command
+        else
+        {
+          myData.movement = 5;
+        }
+      }
+      else
+      {
+        myData.movement = 1;
+      }
   }
 
-*/
+  // Default Case, Tag is behind robot or robot is within stop distance, robot can only rotate to pooint to tag like compass
+  else {
+      Serial.print("  No Clear Orientation abs: ");
+      Serial.println(abs(distance2 - distance3));
+      //If the absolute difference between anchor 2 and 3 is greater than 4 the robot needs to reorient
+      if(abs(distance2 - distance3)>4)
+      {
+        //If anchor3 distance is greater than anchor2 distance2 this means tag is on the right side, so we send right movement command
+        if(distance3>distance2)
+        {
+          myData.movement = 4;
+        }
+        else
+        {
+          //If anchor2 distance is greater than anchor3 distance this means tag is on the left side, so we send left movement command
+          myData.movement = 3;
+        }
+      }
+      else
+      {
+        myData.movement = 0;
+      }
+      
+  }
+
+      
+  esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
+
   //Sleep(RNG_DELAY_MS);
 }
+
