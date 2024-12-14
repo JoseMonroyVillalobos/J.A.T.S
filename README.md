@@ -1,22 +1,22 @@
-##Robot Tracking and Control System
+## Robot Tracking and Control System
 
--This repository contains the code and documentation for a robot tracking and control system. The project uses Ultra-Wideband (UWB) technology for precise localization and communication protocols like ESPNOW and Bluetooth to control the robot’s movement.
+- This repository contains the code and documentation for a robot tracking and control system. The project uses Ultra-Wideband (UWB) technology for precise localization and communication protocols like ESPNOW and Bluetooth to control the robot’s movement.
 
 ##Project Overview
 
-#Objective
+# Objective
 
--The robot is designed to continuously track a tag the user carries and adjust its position to ensure it always faces the tag and follows user. Additionally, an alternative control mode allows for direct manual operation of the robot using a Bluetooth-enabled application.
+- The robot is designed to continuously track a tag the user carries and adjust its position to ensure it always faces the tag and follows user. Additionally, an alternative control mode allows for direct manual operation of the robot using a Bluetooth-enabled application.
 
-##Features
+## Features
 
--Ultra-Wideband Tracking: Uses three anchors on the robot to calculate the distance to a tag for real-time trilateration.
+- Ultra-Wideband Tracking: Uses three anchors on the robot to calculate the distance to a tag for real-time trilateration.
 
--Autonomous Movement: Calculates and executes the required movement to keep the robot oriented towards the tag.
+- Autonomous Movement: Calculates and executes the required movement to keep the robot oriented towards the tag.
 
--ESPNOW Communication: Sends movement instructions from the main ESP32 microcontroller to the drivetrain ESP32 microcontroller.
+- ESPNOW Communication: Sends movement instructions from the main ESP32 microcontroller to the drivetrain ESP32 microcontroller.
 
--Bluetooth Control: An alternate version using the Dabble library enables manual control of the robot via Bluetooth.
+- Bluetooth Control: An alternate version using the Dabble library enables manual control of the robot via Bluetooth.
 
 System Components
 
