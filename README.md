@@ -2,7 +2,7 @@
 
 - This repository contains the code and documentation for a robot tracking and control system. The project uses Ultra-Wideband (UWB) technology for precise localization and communication protocols like ESPNOW and Bluetooth to control the robot’s movement.
 
- ## J.A.T.S 
+ ## J.A.T.S: Journeying Aid Transport System
 ![JATSRobot](https://github.com/user-attachments/assets/757c6047-97f3-4dc4-a8a2-c3c77859cde7)
 
 
@@ -34,7 +34,13 @@
 
 - Drivetrain: Motors and motor drivers controlled by the drivetrain ESP32 microcontroller.
 
-  #### List of Materials
+#### Drivetrain Design
+ ![Drivetrain Design](Assets/DrivetrainDesign.jpg)
+
+#### MicroController Battery System
+ ![MicroController_Battery_System](Assets/MicroController_Battery_System.jpg)
+
+#### List of Materials
   -[NonUWB ESP32s](https://www.amazon.com/dp/B0B764963C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)                         
   -[MicroUSB Data cables for DW3000 Programming](https://www.amazon.com/gp/product/B07QB6KL85/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&th=1)           
   -[V2 Robot Chassis with 4 motors](https://www.amazon.com/dp/B08LK1RDXM?ref=ppx_yo2ov_dt_b_fed_asin_title)                                          
@@ -54,9 +60,10 @@
 
 
 ### Software
+ ![Tracking](Assets/TrackingVisual.jpg)
 
 - Localization Algorithm: Implements trilateration to calculate the tag's position relative to the robot.
-
+  
 - Movement Algorithm: Determines the robot's movement to maintain alignment with the tag.
 
 - ESPNOW Communication: Facilitates wireless communication between the main and drivetrain microcontrollers.
