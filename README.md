@@ -94,7 +94,7 @@ This version focuses on autonomous operation:
 
 ## Why Separate Versions?
 
-- Due to program space limitations on the drivetrain ESP32, the ESPNOW-based tracking system and the Bluetooth control system are maintained as separate versions.
+- Due to program space limitations on the drivetrain ESP32, the ESPNOW-based tracking system and the Bluetooth control system are maintained as separate versions. Bluetooth Version was used intially to test functionality and troubleshoot drivetrain. Final version only uses thee autonomous version.
 
 ## Getting Started
 
