@@ -35,7 +35,7 @@
 - Drivetrain: Motors and motor drivers controlled by the drivetrain ESP32 microcontroller.
 
   #### List of Materials
-  [NonUWB ESP32s] (https://www.amazon.com/dp/B0B764963C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)
+  [NonUWB ESP32s](https://www.amazon.com/dp/B0B764963C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)
   MicroUSB Data cables for DW3000 Programming               
   V2 Robot Chassis with 4 motors                                            
   Battery Shield for dangerous batteries                                      
