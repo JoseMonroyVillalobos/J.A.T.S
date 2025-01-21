@@ -35,9 +35,9 @@
 - Drivetrain: Motors and motor drivers controlled by the drivetrain ESP32 microcontroller.
 
   #### List of Materials
-  -[NonUWB ESP32s](https://www.amazon.com/dp/B0B764963C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)/n
-  -[MicroUSB Data cables for DW3000 Programming](https://www.amazon.com/gp/product/B07QB6KL85/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&th=1)               
-  -[V2 Robot Chassis with 4 motors](https://www.amazon.com/dp/B08LK1RDXM?ref=ppx_yo2ov_dt_b_fed_asin_title)                                             
+  -[NonUWB ESP32s](https://www.amazon.com/dp/B0B764963C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)                         
+  -[MicroUSB Data cables for DW3000 Programming](https://www.amazon.com/gp/product/B07QB6KL85/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&th=1)           
+  -[V2 Robot Chassis with 4 motors](https://www.amazon.com/dp/B08LK1RDXM?ref=ppx_yo2ov_dt_b_fed_asin_title)                                          
   -[Battery Shield for lithium batteries](https://www.amazon.com/dp/B07SZKNST4?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)                                      
   -[2 18650 flat top lithium rechargeable batteries](https://www.amazon.com/dp/B0CRNSFQGX?ref=ppx_yo2ov_dt_b_fed_asin_title)                     
   -[3 pack TB6612FNG Motor Driver Module](https://www.amazon.com/dp/B08J3S6G2N?ref=ppx_yo2ov_dt_b_fed_asin_title)           
