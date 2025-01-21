@@ -35,23 +35,22 @@
 - Drivetrain: Motors and motor drivers controlled by the drivetrain ESP32 microcontroller.
 
   #### List of Materials
-  [NonUWB ESP32s](https://www.amazon.com/dp/B0B764963C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)
-  MicroUSB Data cables for DW3000 Programming               
-  V2 Robot Chassis with 4 motors                                            
-  Battery Shield for dangerous batteries                                      
-  2 18650 flat top lithium rechargeable batteries                        
-  3 pack TB6612FNG Motor Driver Module  	                  
-  Soldering Kit to solder components			      
-  Battery Bank for anchor testing 3 usb A ports                         
-  3 4-pack Ikea rechargeable 2450 mAh			      
-  2 Ikea battery chargers					       
-  2 6-Battery Holder						      
-  5 pack HC-SR04 						       
-  M3*60MM Standoffs				                
-  M3 Screw kit							   
-  12 Foot tape Measure 					     
-  25 Foot Tape Measure					       
-  Angle Finder							   
+  -[NonUWB ESP32s](https://www.amazon.com/dp/B0B764963C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)
+  -[MicroUSB Data cables for DW3000 Programming](https://www.amazon.com/gp/product/B07QB6KL85/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&th=1)               
+  -[V2 Robot Chassis with 4 motors](https://www.amazon.com/dp/B08LK1RDXM?ref=ppx_yo2ov_dt_b_fed_asin_title)                                             
+  -[Battery Shield for lithium batteries](https://www.amazon.com/dp/B07SZKNST4?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)                                      
+  -[2 18650 flat top lithium rechargeable batteries](https://www.amazon.com/dp/B0CRNSFQGX?ref=ppx_yo2ov_dt_b_fed_asin_title)                     
+  -[3 pack TB6612FNG Motor Driver Module](https://www.amazon.com/dp/B08J3S6G2N?ref=ppx_yo2ov_dt_b_fed_asin_title)           
+  -[Soldering Kit to solder components](https://www.amazon.com/dp/B08PZBPXLZ?ref=ppx_yo2ov_dt_b_fed_asin_title) 		      
+  -[Battery Bank for anchor testing 3 usb A ports](https://www.amazon.com/dp/B0C147N71M?ref=ppx_yo2ov_dt_b_fed_asin_title)                        
+  -[3 4-pack Ikea rechargeable 2450 mAh](https://www.ikea.com/us/en/p/ladda-rechargeable-battery-hr06-aa-1-2v-50504692/)    
+  -[2 Ikea battery chargers](https://www.ikea.com/us/en/p/stenkol-battery-charger-50506525/)   
+  -[2 6-Battery Holder](https://www.amazon.com/dp/B0858ZNNPK?ref=ppx_yo2ov_dt_b_fed_asin_title) 	      
+  -[5 pack HC-SR04](https://www.amazon.com/dp/B01JG09DCK?ref_=ppx_hzod_title_dt_b_fed_asin_title_0_0&th=1) 			       
+  -[M3*60MM Standoffs](https://www.amazon.com/dp/B09WHMMNLX?ref_=ppx_hzod_title_dt_b_fed_asin_title_1_0&th=1) 		                
+  -[M3 Screw kit](https://www.amazon.com/gp/product/B08N5TJ2XV/ref=ox_sc_saved_title_1?smid=A2BPIUS9TNF8L5&th=1) 	        
+  -[25 Foot Tape Measure](https://www.harborfreight.com/hand-tools/measuring-marking/tape-measures/25-ft-x-1-in-quikfind-tape-measure-with-abs-casing-69030.html) 		       
+  -[Angle Finder](https://www.harborfreight.com/multi-purpose-angle-finder-57318.html) 				   
 
 
 ### Software
