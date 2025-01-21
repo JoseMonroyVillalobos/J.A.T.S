@@ -34,6 +34,26 @@
 
 - Drivetrain: Motors and motor drivers controlled by the drivetrain ESP32 microcontroller.
 
+  #### List of Materials
+  [NonUWB ESP32s] (https://www.amazon.com/dp/B0B764963C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)
+  MicroUSB Data cables for DW3000 Programming               
+  V2 Robot Chassis with 4 motors                                            
+  Battery Shield for dangerous batteries                                      
+  2 18650 flat top lithium rechargeable batteries                        
+  3 pack TB6612FNG Motor Driver Module  	                  
+  Soldering Kit to solder components			      
+  Battery Bank for anchor testing 3 usb A ports                         
+  3 4-pack Ikea rechargeable 2450 mAh			      
+  2 Ikea battery chargers					       
+  2 6-Battery Holder						      
+  5 pack HC-SR04 						       
+  M3*60MM Standoffs				                
+  M3 Screw kit							   
+  12 Foot tape Measure 					     
+  25 Foot Tape Measure					       
+  Angle Finder							   
+
+
 ### Software
 
 - Localization Algorithm: Implements trilateration to calculate the tag's position relative to the robot.
